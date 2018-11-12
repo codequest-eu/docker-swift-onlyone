@@ -74,6 +74,10 @@ if [ ! -z "${SWIFT_DEFAULT_CONTAINER}" ]; then
 	for container in ${SWIFT_DEFAULT_CONTAINER} ; do
 	    echo "Creating container...${container}"
 	    swift -A http://localhost:8080/auth/v1.0 -U test:tester -K testing post ${container}
+	    if [ ! -z "${SWIFT_META_ACCESS_CONTROL_ALLOW_ORIGIN}" ]; then
+          echo "Setting X-Container-Meta-Access-Control-Allow-Origin..."
+          swift -A http://localhost:8080/auth/v1.0 -U test:tester -K testing post -m "Access-Control-Allow-Origin:${SWIFT_META_ACCESS_CONTROL_ALLOW_ORIGIN}" ${container}
+        fi
 	done
 fi
 
